@@ -1,26 +1,30 @@
 source 'https://rubygems.org'
 
 gem 'rails', '4.1.6'
-
 gem 'rails-api'
-
-gem 'spring', :group => :development
-
 gem 'sqlite3'
 
+gem 'active_model_serializers'
 
+gem 'thin'
 
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
+gem 'kawaii_validation'
 
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
+group :development do
+  gem 'annotate'
+  gem 'bullet'
+  gem 'hirb'
+  gem 'hirb-unicode'
 
-# Use unicorn as the app server
-# gem 'unicorn'
+  gem 'pry-rails'
+  gem 'pry-stack_explorer'
+  gem 'pry-byebug'
+end
 
-# Deploy with Capistrano
-# gem 'capistrano', :group => :development
-
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'database_rewinder'
+  gem 'autodoc', github: 'iTakeshi/autodoc'
+  gem 'codeclimate-test-reporter', require: nil
+end
