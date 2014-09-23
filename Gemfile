@@ -10,6 +10,8 @@ gem 'thin'
 
 gem 'kawaii_validation'
 
+gem 'figaro'
+
 group :development do
   gem 'annotate'
   gem 'bullet'
