@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140920070414) do
+ActiveRecord::Schema.define(version: 20140920081252) do
+
+  create_table "archives", force: true do |t|
+    t.integer  "list_id",                 null: false
+    t.integer  "number",                  null: false
+    t.string   "from",                    null: false
+    t.string   "subject",    default: "", null: false
+    t.text     "body",       default: "", null: false
+    t.text     "raw",        default: "", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "lists", force: true do |t|
     t.string   "name",       null: false
