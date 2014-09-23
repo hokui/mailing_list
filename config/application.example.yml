@@ -1,2 +1,4 @@
 HTTP_USER: "hoge"
 HTTP_PASS: "fuga"
+
+MANDRILL_KEY: "your_mandrill_api_key"

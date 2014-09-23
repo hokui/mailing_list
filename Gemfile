@@ -12,6 +12,8 @@ gem 'kawaii_validation'
 
 gem 'figaro'
 
+gem 'httparty'
+
 group :development do
   gem 'annotate'
   gem 'bullet'
