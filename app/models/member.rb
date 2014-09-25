@@ -17,6 +17,10 @@ class Member < ActiveRecord::Base
   validates(:email) { presence }
   validate :uniqueness_between_email_and_email_sub
 
+  def Member.find_from_existing_emails(email)
+    Member.find_by(email: email) || Member.find_by(email_sub: email)
+  end
+
   private
 
   def uniqueness_between_email_and_email_sub
