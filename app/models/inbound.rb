@@ -1,16 +1,11 @@
 class Inbound
-  class UnknownSenderError     < StandardError; end
-  class UnknwonListError       < StandardError; end
-  class InvalidMessageError    < StandardError; end
-  class FailedPublicationError < StandardError; end
-
   def initialize(message)
     @sender, @from = Member.find_from_existing_emails(message["from_email"])
     unless @sender
-      raise UnknownSenderError
+      fail "UnknownSender"
     end
     unless @list = List.find_by(name: message["email"].split("@").first)
-      raise UnknwonListError
+      fail "UnknownList"
     end
 
     @number = @list.next_number
@@ -34,7 +29,7 @@ class Inbound
         raw: @raw
       )
     rescue ActiveRecord::RecordInvalid
-      raise InvalidMessageError
+      fail "InvalidMessage"
     end
 
     self

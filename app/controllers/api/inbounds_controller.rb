@@ -5,18 +5,23 @@ class Api::InboundsController < Api::ApplicationController
     messages.each do |message|
       begin
         Inbound.new(message).save_archive!.publish!
-      rescue Inbound::UnknownSenderError
-        # ErrorNotifier.unknown_sender(message).deliver
-      rescue Inbound::UnknownListError
-        # ErrorNotifier.unknown_list(message).deliver
-      rescue Inbound::InvalidMessageError
-        # ErrorNotifier.invalid_message(message).deliver
-      rescue Inbound::FailedPublicationError
-        # ErrorNotifier.failed_publication(message).deliver
+      rescue => e
+        case e.message
+        when "UnknownSender"
+          # ErrorNotifier.unknown_sender(message).deliver
+        when "UnknownList"
+          # ErrorNotifier.unknown_list(message).deliver
+        when "InvalidMessage"
+          # ErrorNotifier.invalid_message(message).deliver
+        when "FailedPublication"
+          # ErrorNotifier.failed_publication(message).deliver
+        else
+          raise
+        end
+      ensure
+        head 200
+        return
       end
-
-      head 200
-      return
     end
   end
 end
