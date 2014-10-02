@@ -1,9 +1,11 @@
 class Inbound
   def initialize(message)
-    @sender, @from = Member.find_from_existing_emails(message["from_email"])
-    unless @sender
+    @from = message["from_email"]
+
+    unless @sender = Member.find_from_existing_emails(@from)
       fail "UnknownSender"
     end
+
     unless @list = List.find_by(name: message["email"].split("@").first)
       fail "UnknownList"
     end
