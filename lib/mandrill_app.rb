@@ -10,6 +10,10 @@ class MandrillApp
     self.class.post("/api/1.0/users/info.json", body: post_body)
   end
 
+  def send_message(message)
+    # WIP
+  end
+
   private
 
   def post_body(options={})

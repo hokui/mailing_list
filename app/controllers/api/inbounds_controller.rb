@@ -3,18 +3,20 @@ class InboundsController < Api::ApplicationController
     messages = JSON.parse(params["mandrill_events"]).map { |e| e["msg"] }
 
     messages.each do |message|
-      unless sender = Member.find_from_existing_emails(message["from_email"])
+      begin
+        Inbound.new(message).save_archive!.publish!
+      rescue Inbound::UnknownSenderError
         # ErrorNotifier.unknown_sender(message).deliver
-        head 200
-        return
-      end
-
-      unless list = List.find_by(name: message["email"].split("@").first)
+      rescue Inbound::UnknownListError
         # ErrorNotifier.unknown_list(message).deliver
-        head 200
-        return
+      rescue Inbound::InvalidMessageError
+        # ErrorNotifier.invalid_message(message).deliver
+      rescue Inbound::FailedPublicationError
+        # ErrorNotifier.failed_publication(message).deliver
       end
 
+      head 200
+      return
     end
   end
 end
