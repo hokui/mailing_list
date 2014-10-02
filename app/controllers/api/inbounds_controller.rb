@@ -6,6 +6,7 @@ class Api::InboundsController < Api::ApplicationController
       begin
         Inbound.new(message).save_archive!.publish!
       rescue => e
+        logger.error e
         case e.message
         when "UnknownSender"
           # ErrorNotifier.unknown_sender(message).deliver
