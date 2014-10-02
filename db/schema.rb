@@ -18,7 +18,8 @@ ActiveRecord::Schema.define(version: 20140920081252) do
     t.integer  "number",                  null: false
     t.string   "from",                    null: false
     t.string   "subject",    default: "", null: false
-    t.text     "body",       default: "", null: false
+    t.text     "text",       default: "", null: false
+    t.text     "html",       default: "", null: false
     t.text     "raw",        default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
