@@ -27,7 +27,7 @@ class Inbound
         from: @from,
         subject: @subject,
         text: @text,
-        html: @html,
+        html: @html || "",
         raw: @raw
       )
     rescue ActiveRecord::RecordInvalid
