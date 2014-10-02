@@ -13,4 +13,12 @@ class List < ActiveRecord::Base
   has_and_belongs_to_many :members
 
   validates(:name) { presence; uniqueness }
+
+  def next_number
+    if self.archives.count > 0
+      self.archives.last.number + 1
+    else
+      1
+    end
+  end
 end
