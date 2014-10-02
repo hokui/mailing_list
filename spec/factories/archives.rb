@@ -7,7 +7,8 @@
 #  number     :integer          not null
 #  from       :string(255)      not null
 #  subject    :string(255)      default(""), not null
-#  body       :text             default(""), not null
+#  text       :text             default(""), not null
+#  html       :text             default(""), not null
 #  raw        :text             default(""), not null
 #  created_at :datetime
 #  updated_at :datetime
@@ -19,7 +20,8 @@ FactoryGirl.define do
     number  1
     from    "MyString"
     subject "MyString"
-    body    "MyText"
+    text    "MyText"
+    html    "MyText"
     raw     "MyText"
   end
 end
