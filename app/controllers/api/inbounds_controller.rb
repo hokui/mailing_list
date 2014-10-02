@@ -1,4 +1,4 @@
-class InboundsController < Api::ApplicationController
+class Api::InboundsController < Api::ApplicationController
   def create
     messages = JSON.parse(params["mandrill_events"]).map { |e| e["msg"] }
 
