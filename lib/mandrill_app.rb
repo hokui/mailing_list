@@ -11,8 +11,21 @@ class MandrillApp
   end
 
   def send_message!(message)
-    response = self.class.post("/api/1.0/messages/send.json", body: post_body({ message: message })).parsed_response
-    if response["status"] == "error"
+    response = self.class.post("/api/1.0/messages/send.json", body: post_body({ message: message }))
+
+    # NOTE: A dirty hack, due to inconsistency of response json format between
+    # successful and failed request.
+    #
+    # when successful
+    #   response => HTTParty::Response, [{ "status" => "sent", ... }, ...]
+    # when failed
+    #   response => HTTParty::Response, { "status" => "error", ... }
+    #
+    # Since the class of response object is same for both case, it is not
+    # possible to compare these cases with `response.class`.
+    # Alternatively, these objects can be compared using `#first`, returning
+    # a Hash and an Array, respectively.
+    if response.first.class == Array && response["status"] == "error"
       Rails.logger.error response
       fail
     end
