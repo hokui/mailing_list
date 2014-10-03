@@ -10,12 +10,15 @@ class MandrillApp
     self.class.post("/api/1.0/users/info.json", body: post_body)
   end
 
-  def send_message(message)
-    response = self.class.post("/api/1.0/messages/send.json", body: post_body({ message: message }))
-    fail
+  def send_message!(message)
+    response = self.class.post("/api/1.0/messages/send.json", body: post_body({ message: message })).parsed_response
+    if response["status"] == "error"
+      Rails.logger.error response
+      fail
+    end
   end
 
-  def publish(inbound)
+  def publish!(inbound)
     message = {}
     message[:html] = inbound.html unless inbound.html.nil?
     message[:text] = inbound.text
@@ -28,7 +31,7 @@ class MandrillApp
     message[:track_opens] = true
     message[:preserve_recipients] = false
 
-    send_message(message)
+    send_message!(message)
   end
 
   private
