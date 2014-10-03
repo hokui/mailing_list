@@ -12,6 +12,8 @@ class Api::InboundsController < Api::ApplicationController
           # ErrorNotifier.unknown_sender(message).deliver
         when "UnknownList"
           # ErrorNotifier.unknown_list(message).deliver
+        when "NotParticipating"
+          # ErrorNotifier.not_participating(message).deliver
         when "InvalidMessage"
           # ErrorNotifier.invalid_message(message).deliver
         when "FailedPublication"

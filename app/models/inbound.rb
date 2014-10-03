@@ -10,6 +10,10 @@ class Inbound
       fail "UnknownList"
     end
 
+    unless @sender.lists.include?(@list)
+      fail "NotParticipating"
+    end
+
     @number = @list.next_number
     @subject = "[#{@list.name}:#{@number}] #{message["subject"] || "無題"}"
     @text = message["text"]
