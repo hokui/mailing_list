@@ -44,7 +44,11 @@ class Inbound
   end
 
   def publish!
-    MandrillApp.new.publish(self)
+    begin
+      MandrillApp.new.publish!(self)
+    rescue
+      fail "FailedPublication"
+    end
 
     # TODO if hourly_quota is insufficient, notify sender
   end

@@ -11,12 +11,13 @@ class MandrillApp
   end
 
   def send_message(message)
-    self.class.post("/api/1.0/messages/send.json", body: post_body({ message: message }))
+    response = self.class.post("/api/1.0/messages/send.json", body: post_body({ message: message }))
+    fail
   end
 
   def publish(inbound)
     message = {}
-    message[:html] = inbound.html if inbound.html.length > 0
+    message[:html] = inbound.html unless inbound.html.nil?
     message[:text] = inbound.text
     message[:subject] = inbound.subject
     message[:from_email] = inbound.from
