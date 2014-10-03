@@ -21,4 +21,14 @@ class List < ActiveRecord::Base
       1
     end
   end
+
+  def to
+    # TODO enable members to choose :email or :email_sub
+
+    self.members.pluck(:email)
+  end
+
+  def header_id
+    "<#{self.name}.ml.hokui.net>"
+  end
 end

@@ -1,4 +1,6 @@
 class Inbound
+  attr_reader :from, :sender, :list, :subject, :text, :html, :raw
+
   def initialize(message)
     @from = message["from_email"]
 
@@ -42,7 +44,7 @@ class Inbound
   end
 
   def publish!
-    # WIP
+    MandrillApp.new.publish(self)
 
     # TODO if hourly_quota is insufficient, notify sender
   end

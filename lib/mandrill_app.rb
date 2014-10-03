@@ -11,7 +11,23 @@ class MandrillApp
   end
 
   def send_message(message)
-    # WIP
+    self.class.post("/api/1.0/messages/send.json", body: post_body({ message: message }))
+  end
+
+  def publish(inbound)
+    message = {}
+    message[:html] = inbound.html if inbound.html.length > 0
+    message[:text] = inbound.text
+    message[:subject] = inbound.subject
+    message[:from_email] = inbound.from
+    message[:from_name] = inbound.sender.name
+    message[:to] = inbound.list.to
+    message[:headers] = { "Reply-To" => inbound.from, "List-Id" => inbound.list.header_id }
+    message[:important] = true
+    message[:track_opens] = true
+    message[:preserve_recipients] = false
+
+    send_message(message)
   end
 
   private
