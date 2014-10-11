@@ -16,6 +16,7 @@
 
 class Archive < ActiveRecord::Base
   belongs_to :list
+  has_many :attachments
 
   validates(:number)  { presence }
   validates(:from)    { presence }

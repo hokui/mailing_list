@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140920081252) do
+ActiveRecord::Schema.define(version: 20141011133406) do
 
   create_table "archives", force: true do |t|
     t.integer  "list_id",                 null: false
@@ -24,6 +24,17 @@ ActiveRecord::Schema.define(version: 20140920081252) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "attachments", force: true do |t|
+    t.integer  "archive_id",     null: false
+    t.string   "name",           null: false
+    t.string   "type",           null: false
+    t.text     "content_base64", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "attachments", ["archive_id"], name: "index_attachments_on_archive_id"
 
   create_table "lists", force: true do |t|
     t.string   "name",       null: false
