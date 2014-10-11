@@ -3,7 +3,7 @@ class CreateAttachments < ActiveRecord::Migration
     create_table :attachments do |t|
       t.integer :archive_id,     null: false
       t.string  :name,           null: false
-      t.string  :type,           null: false
+      t.string  :mime,           null: false
       t.text    :content_base64, null: false
 
       t.timestamps

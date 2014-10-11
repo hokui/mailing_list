@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20141011133406) do
   create_table "attachments", force: true do |t|
     t.integer  "archive_id",     null: false
     t.string   "name",           null: false
-    t.string   "type",           null: false
+    t.string   "mime",           null: false
     t.text     "content_base64", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
