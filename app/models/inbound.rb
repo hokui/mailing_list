@@ -22,12 +22,14 @@ class Inbound
     @html = message["html"]
     @raw = message["raw_msg"]
 
-    # TODO Attachments, Pics, Emoji, Env-dep chars, etc.
+    @attachments = Array.new
+    @attachments += build_attachments(message["images"])
+    @attachments += build_attachments(message["attachments"])
   end
 
   def save_archive!
     begin
-      Archive.create!(
+      archive = Archive.create!(
         list: @list,
         number: @number,
         from: @from,
@@ -36,6 +38,10 @@ class Inbound
         html: @html || "",
         raw: @raw
       )
+      @attachments.each do |attachment|
+        attachment.archive = archive
+        attachment.save!
+      end
     rescue ActiveRecord::RecordInvalid
       fail "InvalidMessage"
     end
@@ -51,5 +57,23 @@ class Inbound
     end
 
     # TODO if hourly_quota is insufficient, notify sender
+  end
+
+  private
+
+  def build_attachments(hash)
+    attachments = Array.new
+
+    return attachments if hash.nil?
+
+    hash.each do |k, v|
+      attachments << Attachment.new(
+        name: v["name"],
+        mime: v["type"],
+        content_base64: v["content"]
+      )
+    end
+
+    attachments
   end
 end
