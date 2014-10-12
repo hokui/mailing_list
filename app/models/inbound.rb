@@ -66,10 +66,10 @@ class Inbound
     return attachments if hash.nil?
 
     hash.each do |k, v|
-      if v["base64"] == true
-        content_base64 = v["content"]
-      else
+      if v["base64"] == false
         content_base64 = Base64.encode64(v["content"])
+      else
+        content_base64 = v["content"]
       end
 
       # TODO get original filename for images
