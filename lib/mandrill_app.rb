@@ -44,6 +44,13 @@ class MandrillApp
     message[:track_opens] = true
     message[:preserve_recipients] = false
 
+    message[:images] = inbound.images.map do |image|
+      { "type" => image.mime, "name" => image.name, "content" => image.content_base64 }
+    end
+    message[:attachments] = inbound.attachments.map do |attachment|
+      { "type" => attachment.mime, "name" => attachment.name, "content" => attachment.content_base64 }
+    end
+
     send_message!(message)
   end
 

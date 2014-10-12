@@ -1,5 +1,5 @@
 class Inbound
-  attr_reader :from, :sender, :list, :subject, :text, :html, :raw
+  attr_reader :from, :sender, :list, :subject, :text, :html, :raw, :images, :attachments
 
   def initialize(message)
     @from = message["from_email"]
@@ -22,9 +22,8 @@ class Inbound
     @html = message["html"]
     @raw = message["raw_msg"]
 
-    @attachments = Array.new
-    @attachments += build_attachments(message["images"], true)
-    @attachments += build_attachments(message["attachments"], false)
+    @images      = build_attachments(message["images"], true)
+    @attachments = build_attachments(message["attachments"], false)
   end
 
   def save_archive!
@@ -38,7 +37,7 @@ class Inbound
         html: @html || "",
         raw: @raw
       )
-      @attachments.each do |attachment|
+      (@images + @attachments).each do |attachment|
         attachment.archive = archive
         attachment.save!
       end
@@ -72,6 +71,8 @@ class Inbound
       else
         content_base64 = Base64.encode64(v["content"])
       end
+
+      # TODO get original filename for images
 
       attachments << Attachment.new(
         name: v["name"],
