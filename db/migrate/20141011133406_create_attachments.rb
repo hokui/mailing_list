@@ -4,6 +4,7 @@ class CreateAttachments < ActiveRecord::Migration
       t.integer :archive_id,     null: false
       t.string  :name,           null: false
       t.string  :mime,           null: false
+      t.boolean :is_image
       t.text    :content_base64, null: false
 
       t.timestamps

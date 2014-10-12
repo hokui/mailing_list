@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20141011133406) do
     t.integer  "archive_id",     null: false
     t.string   "name",           null: false
     t.string   "mime",           null: false
+    t.boolean  "is_image"
     t.text     "content_base64", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
