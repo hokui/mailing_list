@@ -23,8 +23,8 @@ class Inbound
     @raw = message["raw_msg"]
 
     @attachments = Array.new
-    @attachments += build_attachments(message["images"])
-    @attachments += build_attachments(message["attachments"])
+    @attachments += build_attachments(message["images"], true)
+    @attachments += build_attachments(message["attachments"], false)
   end
 
   def save_archive!
@@ -61,16 +61,23 @@ class Inbound
 
   private
 
-  def build_attachments(hash)
+  def build_attachments(hash, is_image)
     attachments = Array.new
 
     return attachments if hash.nil?
 
     hash.each do |k, v|
+      if v["base64"] == true
+        content_base64 = v["content"]
+      else
+        content_base64 = Base64.encode64(v["content"])
+      end
+
       attachments << Attachment.new(
         name: v["name"],
         mime: v["type"],
-        content_base64: v["content"]
+        is_image: is_image,
+        content_base64: content_base64
       )
     end
 
