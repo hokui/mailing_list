@@ -17,13 +17,15 @@ class Inbound
     end
 
     @number = @list.next_number
-    @subject = "[#{@list.name}:#{@number}] #{message["subject"] || "無題"}"
+    @subject = message["subject"] || "無題"
     @text = message["text"]
     @html = message["html"]
     @raw = message["raw_msg"]
 
     @images      = build_attachments(message["images"], true)
     @attachments = build_attachments(message["attachments"], false)
+
+    # TODO: Consider "In-Reply-To"
   end
 
   def save_archive!

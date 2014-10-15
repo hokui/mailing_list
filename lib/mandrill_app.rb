@@ -35,7 +35,7 @@ class MandrillApp
     message = {}
     message[:html] = inbound.html unless inbound.html.nil?
     message[:text] = inbound.text
-    message[:subject] = inbound.subject
+    message[:subject] = "[#{inbound.list.name}:#{inbound.number}] #{inbound.subject}"
     message[:from_email] = inbound.from
     message[:from_name] = inbound.sender.name
     message[:to] = inbound.list.to
