@@ -16,6 +16,8 @@ class Inbound
       fail "NotParticipating"
     end
 
+    @message_id = message["headers"]["Message-Id"]
+
     @number = @list.next_number
     @subject = message["subject"] || "無題"
     @text = message["text"]
@@ -32,6 +34,7 @@ class Inbound
     begin
       archive = Archive.create!(
         list: @list,
+        message_id: @message_id
         number: @number,
         from: @from,
         subject: @subject,

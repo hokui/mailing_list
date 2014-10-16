@@ -22,9 +22,10 @@ class Archive < ActiveRecord::Base
   has_many :children, class_name: "Archive", foreign_key: "parent_id"
   has_many :attachments
 
-  validates(:number)  { presence }
-  validates(:from)    { presence }
-  validates(:subject) { presence }
-  validates(:text)    { presence }
-  validates(:raw)     { presence }
+  validates(:message_id) { presence }
+  validates(:number)     { presence }
+  validates(:from)       { presence }
+  validates(:subject)    { presence }
+  validates(:text)       { presence }
+  validates(:raw)        { presence }
 end
