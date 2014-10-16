@@ -2,6 +2,8 @@ class CreateArchives < ActiveRecord::Migration
   def change
     create_table :archives do |t|
       t.integer :list_id,              null: false
+      t.integer :parent_id
+      t.string  :message_id,           null: false
       t.integer :number,               null: false
       t.string  :from,                 null: false
       t.string  :subject, default: "", null: false

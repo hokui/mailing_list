@@ -15,6 +15,8 @@ ActiveRecord::Schema.define(version: 20141011133406) do
 
   create_table "archives", force: true do |t|
     t.integer  "list_id",                 null: false
+    t.integer  "parent_id"
+    t.string   "message_id",              null: false
     t.integer  "number",                  null: false
     t.string   "from",                    null: false
     t.string   "subject",    default: "", null: false

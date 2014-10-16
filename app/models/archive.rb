@@ -4,6 +4,8 @@
 #
 #  id         :integer          not null, primary key
 #  list_id    :integer          not null
+#  parent_id  :integer
+#  message_id :string(255)      not null
 #  number     :integer          not null
 #  from       :string(255)      not null
 #  subject    :string(255)      default(""), not null
@@ -16,6 +18,8 @@
 
 class Archive < ActiveRecord::Base
   belongs_to :list
+  belongs_to :parent, class_name: "Archive"
+  has_many :children, class_name: "Archive", foreign_key: "parent_id"
   has_many :attachments
 
   validates(:number)  { presence }
