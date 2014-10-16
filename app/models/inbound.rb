@@ -34,7 +34,7 @@ class Inbound
     begin
       archive = Archive.create!(
         list: @list,
-        message_id: @message_id
+        message_id: @message_id,
         number: @number,
         from: @from,
         subject: @subject,
