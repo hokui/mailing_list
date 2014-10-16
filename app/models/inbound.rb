@@ -18,6 +18,10 @@ class Inbound
 
     @message_id = message["headers"]["Message-Id"]
 
+    if parent_message_id = message["headers"]["In-Reply-To"]
+      @parent = Archive.find_by(message_id: parent_message_id)
+    end
+
     @number = @list.next_number
     @subject = message["subject"] || "無題"
     @text = message["text"]
@@ -34,6 +38,7 @@ class Inbound
     begin
       archive = Archive.create!(
         list: @list,
+        parent: @parent,
         message_id: @message_id,
         number: @number,
         from: @from,
