@@ -32,7 +32,7 @@ class Inbound
 
   def save_archive!
     begin
-      archive = Archive.create!(
+      @archive = Archive.create!(
         list: @list,
         parent: @parent,
         number: @number,
@@ -43,7 +43,7 @@ class Inbound
         raw: @raw
       )
       (@images + @attachments).each do |attachment|
-        attachment.archive = archive
+        attachment.archive = @archive
         attachment.save!
       end
     rescue ActiveRecord::RecordInvalid
@@ -55,10 +55,12 @@ class Inbound
 
   def publish!
     begin
-      MandrillApp.new.publish!(self)
+      response = MandrillApp.new.publish!(self)
     rescue
       fail "FailedPublication"
     end
+
+    update_message_id(response)
 
     # TODO if hourly_quota is insufficient, notify sender
   end
@@ -88,5 +90,10 @@ class Inbound
     end
 
     attachments
+  end
+
+  def update_message_id(response)
+    @archive.message_id = response.first["_id"]
+    @archive.save!
   end
 end

@@ -29,6 +29,8 @@ class MandrillApp
       Rails.logger.error response
       fail
     end
+
+    response
   end
 
   def publish!(inbound)
