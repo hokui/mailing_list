@@ -5,7 +5,7 @@
 #  id         :integer          not null, primary key
 #  list_id    :integer          not null
 #  parent_id  :integer
-#  message_id :string(255)      not null
+#  message_id :string(255)
 #  number     :integer          not null
 #  from       :string(255)      not null
 #  subject    :string(255)      default(""), not null
@@ -22,7 +22,6 @@ class Archive < ActiveRecord::Base
   has_many :children, class_name: "Archive", foreign_key: "parent_id"
   has_many :attachments
 
-  validates(:message_id) { presence }
   validates(:number)     { presence }
   validates(:from)       { presence }
   validates(:subject)    { presence }
