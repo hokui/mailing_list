@@ -1,5 +1,5 @@
 class Inbound
-  attr_reader :from, :sender, :list, :subject, :text, :html, :raw, :images, :attachments
+  attr_reader :from, :sender, :list, :parent, :number, :subject, :text, :html, :raw, :images, :attachments
 
   def initialize(message)
     @from = message["from_email"]
@@ -16,8 +16,6 @@ class Inbound
       fail "NotParticipating"
     end
 
-    @message_id = message["headers"]["Message-Id"]
-
     if parent_message_id = message["headers"]["In-Reply-To"]
       @parent = Archive.find_by(message_id: parent_message_id)
     end
@@ -30,8 +28,6 @@ class Inbound
 
     @images      = build_attachments(message["images"], true)
     @attachments = build_attachments(message["attachments"], false)
-
-    # TODO: Consider "In-Reply-To"
   end
 
   def save_archive!
@@ -39,7 +35,6 @@ class Inbound
       archive = Archive.create!(
         list: @list,
         parent: @parent,
-        message_id: @message_id,
         number: @number,
         from: @from,
         subject: @subject,

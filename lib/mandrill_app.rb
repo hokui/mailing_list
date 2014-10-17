@@ -39,7 +39,11 @@ class MandrillApp
     message[:from_email] = inbound.from
     message[:from_name] = inbound.sender.name
     message[:to] = inbound.list.to
-    message[:headers] = { "Reply-To" => inbound.from, "List-Id" => inbound.list.header_id }
+    if inbound.parent
+      message[:headers] = { "Reply-To" => inbound.from, "List-Id" => inbound.list.header_id, "In-Reply-To" => inbound.parent.message_id }
+    else
+      message[:headers] = { "Reply-To" => inbound.from, "List-Id" => inbound.list.header_id }
+    end
     message[:important] = true
     message[:track_opens] = true
     message[:preserve_recipients] = false
