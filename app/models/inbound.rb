@@ -21,7 +21,7 @@ class Inbound
     end
 
     @number = @list.next_number
-    @subject = message["subject"] || "無題"
+    @subject = @parent ? @parent.subject : message["subject"] || "無題"
     @text = message["text"]
     @html = message["html"]
     @raw = message["raw_msg"]
