@@ -79,8 +79,6 @@ class Inbound
         content_base64 = v["content"]
       end
 
-      # TODO get original filename for images
-
       attachments << Attachment.new(
         name: v["name"],
         mime: v["type"],
