@@ -9,15 +9,15 @@ class Api::InboundsController < Api::ApplicationController
         logger.error e
         case e.message
         when "UnknownSender"
-          Notifier.unknown_sender(message).deliver
+          Notifier.new.unknown_sender(message).deliver
         when "UnknownList"
-          Notifier.unknown_list(message).deliver
+          Notifier.new.unknown_list(message).deliver
         when "NotParticipating"
-          Notifier.not_participating(message).deliver
+          Notifier.new.not_participating(message).deliver
         when "InvalidMessage"
-          Notifier.invalid_message(message).deliver
+          Notifier.new.invalid_message(message).deliver
         when "FailedPublication"
-          Notifier.failed_publication(message).deliver
+          Notifier.new.failed_publication(message).deliver
         else
           raise
         end
