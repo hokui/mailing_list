@@ -1,7 +1,9 @@
 class Inbound
-  attr_reader :from, :sender, :list, :parent, :number, :subject, :text, :html, :raw, :images, :attachments
+  attr_reader :message, :from, :sender, :list, :parent, :number, :subject, :text, :html, :raw, :images, :attachments
 
   def initialize(message)
+    @message = message
+
     @from = message["from_email"]
 
     unless @sender = Member.find_from_existing_emails(@from)
@@ -54,6 +56,10 @@ class Inbound
   end
 
   def publish!
+    if MandrillApp.new.user_info["hourly_quota"] < @list.members.count
+      Notifier.new.insufficient_hourly_quota(@message).deliver
+    end
+
     begin
       response = MandrillApp.new.publish!(self)
     rescue
@@ -61,8 +67,6 @@ class Inbound
     end
 
     update_message_id(response)
-
-    # TODO if hourly_quota is insufficient, notify sender
   end
 
   private

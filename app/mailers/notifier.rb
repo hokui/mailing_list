@@ -43,6 +43,14 @@ class Notifier
     self
   end
 
+  def insufficient_hourly_quota(message)
+    cause = "時間あたりの送信量制限に達したため"
+    deal = "メッセージは1時間以内に配信されますので、そのままお待ちください。"
+    @notification = build_notification(cause, deal, message)
+
+    self
+  end
+
   private
 
   def build_notification(cause, deal, message)
