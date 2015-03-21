@@ -1,5 +1,6 @@
 class MemberSerializer < ActiveModel::Serializer
-  attributes :name,
+  attributes :id,
+             :name,
              :email,
              :email_sub,
              :errors

@@ -1,4 +1,5 @@
 class ListSerializer < ActionModel::Serializer
-  attributes :name,
+  attributes :id,
+             :name,
              :errors
 end
