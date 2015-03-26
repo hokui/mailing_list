@@ -1,5 +1,5 @@
 class Api::ListsController < Api::ApplicationController
-  before_action :set_list, only: [:show, :update, :destroy]
+  before_action :set_list, only: [:show, :update, :destroy, :add_member]
 
   def index
     @lists = List.all
@@ -30,6 +30,12 @@ class Api::ListsController < Api::ApplicationController
   def destroy
     @list.destroy
     head 200
+  end
+
+  def add_member
+    member = Member.find(params[:member_id])
+    @list.members << member if member
+    render json: { status: :ok }
   end
 
   private
