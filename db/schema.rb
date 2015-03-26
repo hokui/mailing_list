@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20141011133406) do
 
-  create_table "archives", force: true do |t|
+  create_table "archives", force: :cascade do |t|
     t.integer  "list_id",                 null: false
     t.integer  "parent_id"
     t.string   "message_id"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20141011133406) do
     t.datetime "updated_at"
   end
 
-  create_table "attachments", force: true do |t|
+  create_table "attachments", force: :cascade do |t|
     t.integer  "archive_id",     null: false
     t.string   "name",           null: false
     t.string   "mime",           null: false
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20141011133406) do
 
   add_index "attachments", ["archive_id"], name: "index_attachments_on_archive_id"
 
-  create_table "lists", force: true do |t|
+  create_table "lists", force: :cascade do |t|
     t.string   "name",       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -47,14 +47,14 @@ ActiveRecord::Schema.define(version: 20141011133406) do
 
   add_index "lists", ["name"], name: "index_lists_on_name", unique: true
 
-  create_table "lists_members", id: false, force: true do |t|
+  create_table "lists_members", id: false, force: :cascade do |t|
     t.integer "list_id",   null: false
     t.integer "member_id", null: false
   end
 
   add_index "lists_members", ["list_id", "member_id"], name: "index_lists_members_on_list_id_and_member_id", unique: true
 
-  create_table "members", force: true do |t|
+  create_table "members", force: :cascade do |t|
     t.string   "name",                    null: false
     t.string   "email",                   null: false
     t.string   "email_sub",  default: "", null: false
