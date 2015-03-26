@@ -15,7 +15,7 @@ class Api::ListsController < Api::ApplicationController
     if @list.save
       render json: @list, status: 201
     else
-      render json: @list, status: 422
+      render json: { errors: @list.errors }, status: 422
     end
   end
 
@@ -23,7 +23,7 @@ class Api::ListsController < Api::ApplicationController
     if @list.update_attributes(list_params)
       render json: @list, status: 200
     else
-      render json: @list, status: 422
+      render json: { errors: @list.errors }, status: 422
     end
   end
 
