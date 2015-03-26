@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.6'
-gem 'rails-api'
+gem 'rails', '4.2.0'
+gem 'rails-api', github: 'rails-api/rails-api'
 gem 'sqlite3'
 
-gem 'active_model_serializers'
+gem 'active_model_serializers', github: 'rails-api/active_model_serializers'
 
 gem 'thin'
 
@@ -29,6 +29,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'database_rewinder'
-  gem 'autodoc', github: 'iTakeshi/autodoc'
+  gem 'autodoc'
   gem 'codeclimate-test-reporter', require: nil
 end
