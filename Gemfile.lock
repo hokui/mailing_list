@@ -1,11 +1,4 @@
 GIT
-  remote: git://github.com/rails-api/active_model_serializers.git
-  revision: 4891c22a7831c8b15f056968612ccac3cc3fdb46
-  specs:
-    active_model_serializers (0.10.0.pre)
-      activemodel (>= 4.0)
-
-GIT
   remote: git://github.com/rails-api/rails-api.git
   revision: a191197fdb415a03c6a814bab7c5aec56d0e7837
   specs:
@@ -205,7 +198,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_model_serializers!
   annotate
   autodoc
   bullet
