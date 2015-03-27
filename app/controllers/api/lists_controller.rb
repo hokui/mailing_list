@@ -34,7 +34,7 @@ class Api::ListsController < Api::ApplicationController
 
   def add_member
     member = Member.find(params[:member_id])
-    @list.members << member if member
+    @list.members << member if member && !member.lists.include?(@list)
     render json: { status: :ok }
   end
 
