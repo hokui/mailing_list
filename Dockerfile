@@ -13,11 +13,8 @@ WORKDIR /var/app
 
 ENV RAILS_ENV=production
 
-# TODO use volume container
-RUN rake db:migrate
-
 EXPOSE 8002
 
 VOLUME ["/var/app/log"]
 
-ENTRYPOINT ["/usr/local/bin/rails", "server", "-p", "8002"]
+ENTRYPOINT ["bash", "run.sh"]
