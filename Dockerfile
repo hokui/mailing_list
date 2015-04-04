@@ -13,11 +13,6 @@ WORKDIR /var/app
 
 ENV RAILS_ENV=production
 
-RUN rm -v /var/app/config/*.yml*
-ADD /var/config/hokui/mailing_list/application.yml /var/app/config/application.yml
-ADD /var/config/hokui/mailing_list/database.yml /var/app/config/database.yml
-ADD /var/config/hokui/mailing_list/secrets.yml /var/app/config/secrets.yml
-
 # TODO use volume container
 RUN rake db:migrate
 
