@@ -25,4 +25,4 @@ EXPOSE 8002
 
 VOLUME ["/var/app/log"]
 
-ENTRYPOINT ["rails server -p 8002"]
+ENTRYPOINT ["/usr/local/bin/rails", "server", "-p", "8002"]
