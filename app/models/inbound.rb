@@ -3,10 +3,6 @@ class Inbound
 
   def initialize(params)
     @from = JSON.parse(params["envelope"])["from"]
-    fail "UnknownSender" unless @sender = Member.find_from_existing_emails(@from)
-    fail "UnknownList" unless @list = List.find_by(name: params["to"].split("@").first)
-    fail "NotParticipating" unless @sender.lists.include?(@list)
-
     @number = @list.next_number
     @subject = params["subject"] || "無題"
     @text = params["text"]
@@ -18,6 +14,10 @@ class Inbound
   end
 
   def save_archive!
+    fail "UnknownSender" unless @sender = Member.find_from_existing_emails(@from)
+    fail "UnknownList" unless @list = List.find_by(name: params["to"].split("@").first)
+    fail "NotParticipating" unless @sender.lists.include?(@list)
+
     begin
       @archive = Archive.create!(
         list: @list,
@@ -34,6 +34,7 @@ class Inbound
         attachment.save!
       end
     rescue ActiveRecord::RecordInvalid
+      Rails.logger.error @archive.errors
       fail "InvalidMessage"
     end
 

@@ -1,20 +1,21 @@
 class Api::InboundsController < Api::ApplicationController
   def create
+    @inbound = inbound.new(params)
     begin
-      Inbound.new(params).save_archive!.publish!
+      @inbound.save_archive!.publish!
     rescue => e
       logger.error e
       case e.message
       when "UnknownSender"
-        Notifier.new.unknown_sender(message).deliver
+        Notifier.new.unknown_sender(@inbound).deliver
       when "UnknownList"
-        Notifier.new.unknown_list(message).deliver
+        Notifier.new.unknown_list(@inbound).deliver
       when "NotParticipating"
-        Notifier.new.not_participating(message).deliver
+        Notifier.new.not_participating(@inbound).deliver
       when "InvalidMessage"
-        Notifier.new.invalid_message(message).deliver
+        Notifier.new.invalid_message(@inbound).deliver
       when "FailedPublication"
-        Notifier.new.failed_publication(message).deliver
+        Notifier.new.failed_publication(@inbound).deliver
       else
         raise
       end
