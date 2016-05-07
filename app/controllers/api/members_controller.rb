@@ -12,6 +12,7 @@ class Api::MembersController < Api::ApplicationController
 
   def create
     @member = Member.new(member_params)
+    @member.email_sub ||= ""
     if @member.save
       render json: @member, status: 201
     else
