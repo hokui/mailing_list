@@ -1,35 +1,20 @@
 class Inbound
-  attr_reader :message, :from, :sender, :list, :parent, :number, :subject, :text, :html, :raw, :images, :attachments
+  attr_reader :from, :sender, :list, :parent, :number, :subject, :text, :html, :raw, :images, :attachments
 
-  def initialize(message)
-    @message = message
-
-    @from = message["from_email"]
-
-    unless @sender = Member.find_from_existing_emails(@from)
-      fail "UnknownSender"
-    end
-
-    unless @list = List.find_by(name: message["email"].split("@").first)
-      fail "UnknownList"
-    end
-
-    unless @sender.lists.include?(@list)
-      fail "NotParticipating"
-    end
-
-    if parent_message_id = message["headers"]["In-Reply-To"]
-      @parent = Archive.find_by(message_id: parent_message_id)
-    end
+  def initialize(params)
+    @from = JSON.parse(params["envelope"])["from"]
+    fail "UnknownSender" unless @sender = Member.find_from_existing_emails(@from)
+    fail "UnknownList" unless @list = List.find_by(name: params["to"].split("@").first)
+    fail "NotParticipating" unless @sender.lists.include?(@list)
 
     @number = @list.next_number
-    @subject = @parent ? @parent.subject : message["subject"] || "無題"
-    @text = message["text"]
-    @html = message["html"]
-    @raw = message["raw_msg"]
+    @subject = params["subject"] || "無題"
+    @text = params["text"]
+    @html = params["html"]
+    @parent = nil
+    @raw = nil
 
-    @images      = build_attachments(message["images"], true)
-    @attachments = build_attachments(message["attachments"], false)
+    @attachments = build_attachments(params)
   end
 
   def save_archive!
@@ -44,7 +29,7 @@ class Inbound
         html: @html || "",
         raw: @raw
       )
-      (@images + @attachments).each do |attachment|
+      @attachments.each do |attachment|
         attachment.archive = @archive
         attachment.save!
       end
@@ -56,46 +41,25 @@ class Inbound
   end
 
   def publish!
-    if MandrillApp.new.user_info["hourly_quota"] < @list.members.count
-      Notifier.new.insufficient_hourly_quota(@message).deliver
-    end
-
     begin
-      response = MandrillApp.new.publish!(self)
+      SendGridClient.publish!(self)
     rescue
       fail "FailedPublication"
     end
-
-    update_message_id(response)
   end
 
   private
 
-  def build_attachments(hash, is_image)
-    attachments = Array.new
+  def build_attachments(params)
+    return if params["attachment-info"].nil?
 
-    return attachments if hash.nil?
-
-    hash.each do |k, v|
-      if v["base64"] == false
-        content_base64 = Base64.encode64(v["content"])
-      else
-        content_base64 = v["content"]
-      end
-
-      attachments << Attachment.new(
-        name: v["name"],
+    JSON.parse(params["attachment-info"]).map do |k, v|
+      Attachment.new(
+        name: v["filename"],
         mime: v["type"],
-        is_image: is_image,
-        content_base64: content_base64
+        is_image: false,
+        content_base64: Base64.encode64(params[k].read)
       )
     end
-
-    attachments
-  end
-
-  def update_message_id(response)
-    @archive.message_id = response.first["_id"]
-    @archive.save!
   end
 end
