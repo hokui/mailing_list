@@ -35,7 +35,7 @@ class SendGridClient
       inbound.attachments.each do |attachment|
         message.attachments << {
           file: Faraday::UploadIO.new(
-            Base64.decode64(attachment.content_base64),
+            StringIO.new(attachment.content_base64.unpack('m')[0]),
             attachment.mime,
             attachment.name
           ),
