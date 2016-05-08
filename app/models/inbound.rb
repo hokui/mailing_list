@@ -2,9 +2,10 @@ class Inbound
   attr_reader :from, :sender, :list, :parent, :number, :subject, :text, :html, :raw, :images, :attachments
 
   def initialize(params)
-    @from = JSON.parse(params["envelope"])["from"]
+    envelope = JSON.parse(params["envelope"])
+    @from = envelope["from"]
     @sender = Member.find_from_existing_emails(@from)
-    @list = List.find_by(name: params["to"].split("@").first)
+    @list = List.find_by(name: envelope["to"][0].split("@").first)
     @number = @list.next_number
     @subject = params["subject"] || "無題"
     @text = params["text"]
