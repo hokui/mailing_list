@@ -1,6 +1,6 @@
 class Api::InboundsController < Api::ApplicationController
   def create
-    @inbound = inbound.new(params)
+    @inbound = Inbound.new(params)
     begin
       @inbound.save_archive!.publish!
     rescue => e
