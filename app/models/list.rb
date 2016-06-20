@@ -25,7 +25,7 @@ class List < ActiveRecord::Base
   def to
     # TODO enable members to choose :email or :email_sub
 
-    self.members.pluck(:email, :name).map { |email, name| "#{name} <#{email}>" }
+    self.members.pluck(:email, :email_sub, :name).map { |email, email_sub, name| ["#{name} <#{email}>", "#{name} <#{email_sub}>"]}.flatten
   end
 
   def header_id
